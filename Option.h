@@ -11,19 +11,18 @@
 #define OPTION_H
 
 
+class Option {
+protected:
+    double initial_price = 0;
+    double risk_free_rate = 0;
+    double volatility = 0;
+    double time_to_maturity = 0;
+    double strike_price = 0;
+    // This is used when calculating the expected payoff
+    int is_put_option = 0;
 
-class Option{
-    protected:
-      double initial_price = 0;
-      double risk_free_rate = 0;
-      double volatility = 0;
-      double time_to_maturity = 0;
-      double strike_price = 0;
-      int is_put_option = 0;
-
-    public:
-//      Option(double initial_price, double risk_free_rate, double volatility, double time_to_maturity,
-//             double strike_price);
+public:
+    // No constructor for base class as we don't want the user to create this base class
     double get_initial_price() const { return initial_price; }
     double get_risk_free_rate() const { return risk_free_rate; }
     double get_volatility() const { return volatility; }
@@ -31,48 +30,42 @@ class Option{
     double get_strike_price() const { return strike_price; }
 
     virtual ~Option();
+
     virtual std::vector<double> get_expected_payoff(int) = 0;
+
     virtual std::vector<double> get_option_price(std::vector<double>) = 0;
 };
 
-class EuropeanOption : public Option{
-    public:
-      ~EuropeanOption() override = default;
+class EuropeanOption : public Option {
+public:
+    ~EuropeanOption() override = default;
 
-     std::vector<double> get_expected_payoff(int) override;
-     std::vector<double> get_option_price(std::vector<double>) override;
+    std::vector<double> get_expected_payoff(int) override;
+
+    std::vector<double> get_option_price(std::vector<double>) override;
 };
 
-class EuropeanCallOption : public EuropeanOption{
-    private:
-      int is_put_option = 0;
+class EuropeanCallOption : public EuropeanOption {
+private:
+    int is_put_option = 0;
 
-    public:
+public:
     EuropeanCallOption(double initial_price, double risk_free_rate, double volatility, double time_to_maturity,
                        double strike_price);
 
-      ~EuropeanCallOption();
+    ~EuropeanCallOption();
 };
 
-class EuropeanPutOption : public EuropeanOption{
-    private:
-     int is_put_option = 1;
+class EuropeanPutOption : public EuropeanOption {
+private:
+    int is_put_option = 1;
 
-    public:
+public:
     EuropeanPutOption(double initial_price, double risk_free_rate, double volatility, double time_to_maturity,
-                       double strike_price);
+                      double strike_price);
+
     ~EuropeanPutOption();
 };
-
-//class AmericanOption : public Option{
-//    public:
-//    AmericanOption(double initial_price, double risk_free_rate, double volatility, double time_to_maturity,
-//                   double strike_price);
-//    ~AmericanOption();
-//    double get_expected_payoff(int);
-//    double get_option_price(double);
-//};
-
 
 
 #endif //OPTION_H

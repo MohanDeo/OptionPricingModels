@@ -7,4 +7,5 @@ include_directories(.)
 
 add_executable(MonteCarloOptionPricing
     Option.cpp
-    Option.h)
+    Option.h
+        main.cpp)

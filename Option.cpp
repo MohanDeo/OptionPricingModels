@@ -12,12 +12,12 @@ std::vector<double> EuropeanOption::get_expected_payoff(int number_of_simulation
     std::vector<double> payoffs(number_of_simulations);
 
     for (int i = 0; i < number_of_simulations; i++) {
-        double option_price = initial_price * std::exp((risk_free_rate - 0.5 * std::pow(volatility, 2)) *
+        double share_price = initial_price * std::exp((risk_free_rate - 0.5 * std::pow(volatility, 2)) *
                               time_to_maturity
                               + volatility * std::sqrt(time_to_maturity) * dist(rng)
         );
-        ;
-        double payoff_arg = std::pow(-1, is_put_option) * (option_price - strike_price);
+        // This ensures the reusability of the code
+        double payoff_arg = std::pow(-1, is_put_option) * (share_price - strike_price);
         double payoff = std::max(payoff_arg, 0.0);
         double discounted_payoff = std::exp(-risk_free_rate * time_to_maturity) * payoff;
         payoffs[i] = discounted_payoff;
